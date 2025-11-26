@@ -34,9 +34,11 @@
         /* Custom Scroll Snap for Slide effect */
         .scroll-snap-wrapper {
             height: 100vh;
+            height: 100dvh; /* 모바일 브라우저 주소창 고려 */
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
 
         .slide {
@@ -56,6 +58,75 @@
             .slide {
                 min-height: auto;
                 height: 100vh; /* Fit to screen height if aspect ratio allows */
+            }
+        }
+
+        /* ----- 모바일 최적화 ----- */
+        @media (max-width: 768px) {
+            body {
+                background-color: #ffffff;
+            }
+
+            .slide-container {
+                max-width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .scroll-snap-wrapper {
+                height: 100dvh;
+            }
+
+            .slide {
+                aspect-ratio: auto;      /* 16:9 강제 해제 */
+                min-height: 100dvh;      /* 화면 한 장씩 보이도록 유지 */
+                padding: 1.5rem 1rem;    /* 좌우 여백 축소 */
+            }
+
+            /* 타이포 & 레이아웃 살짝 축소 */
+            h1 {
+                font-size: 2.25rem;      /* 대략 text-3xl 정도 */
+                line-height: 1.25;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            p {
+                font-size: 0.95rem;
+            }
+
+            /* 그리드 간격 줄이기 */
+            .mobile-gap-sm {
+                gap: 1.5rem !important;
+            }
+
+            /* Slide3: 오른쪽 플로팅 카드가 화면 밖으로 나가는 것 방지 */
+            .slide-3-floating {
+                position: static;
+                margin-top: 1.5rem;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+                width: 100%;
+            }
+
+            .slide-3-floating > div {
+                position: static !important;
+                width: 100% !important;
+            }
+
+            /* Slide4: 양쪽 카드 간격 줄이기 */
+            .slide4-flex {
+                flex-direction: column;
+                gap: 1.25rem;
+            }
+
+            .slide4-card {
+                width: 100% !important;
+                max-width: 260px;
+                margin: 0 auto;
             }
         }
 
@@ -125,7 +196,7 @@
                 <div class="leaf" style="left: 70%; animation-duration: 10s; animation-delay: 4s;"></div>
                 <div class="leaf" style="left: 90%; background:#A0341F; animation-duration: 7s; animation-delay: 1s;"></div>
 
-                <div class="relative z-10 max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="relative z-10 max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 mobile-gap-sm items-center">
                     <div class="fade-in-up">
                         <span class="text-autumn-red font-bold tracking-widest text-sm uppercase mb-2 block">Sermon Intro</span>
                         <h1 class="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
@@ -167,7 +238,7 @@
                         <p class="text-gray-400 text-lg">많은 사람들이 오해해왔던 하나님의 마음</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mobile-gap-sm">
                         <!-- Misunderstanding -->
                         <div class="bg-gray-800 p-8 rounded-lg fade-in-up delay-100 opacity-50 hover:opacity-100 transition-opacity">
                             <h3 class="text-xl font-bold text-red-400 mb-3 flex items-center">
@@ -200,7 +271,7 @@
 
             <!-- Slide 3: Application (Reflection) -->
             <section class="slide bg-white" id="slide3">
-                <div class="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-center h-full">
+                <div class="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-8 mobile-gap-sm items-center h-full">
                     <!-- Left Text -->
                     <div class="md:col-span-5 fade-in-up">
                         <h2 class="text-5xl font-bold serif text-gray-900 mb-8">
@@ -240,11 +311,13 @@
                         </div>
                         
                         <!-- Floating Cards -->
-                        <div class="absolute top-1/4 right-10 bg-autumn-red text-white p-4 rounded shadow-lg text-sm w-48">
-                            결혼은 강력한 <strong>약속</strong>입니다.
-                        </div>
-                        <div class="absolute bottom-1/4 left-0 bg-gray-800 text-white p-4 rounded shadow-lg text-sm w-48">
-                            폭력과 이용을 <strong>멈춰야</strong> 합니다.
+                        <div class="slide-3-floating absolute top-1/4 right-10">
+                            <div class="bg-autumn-red text-white p-4 rounded shadow-lg text-sm w-48">
+                                결혼은 강력한 <strong>약속</strong>입니다.
+                            </div>
+                            <div class="bg-gray-800 text-white p-4 rounded shadow-lg text-sm w-48">
+                                폭력과 이용을 <strong>멈춰야</strong> 합니다.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -265,9 +338,9 @@
                         <!-- Path visualization -->
                         <div class="absolute left-1/2 transform -translate-x-1/2 top-0 h-full w-1 bg-dashed border-l-2 border-gray-400 h-64 z-0"></div>
                         
-                        <div class="flex justify-center items-center gap-4 md:gap-20 relative z-10">
+                        <div class="flex justify-center items-center gap-4 md:gap-20 relative z-10 slide4-flex">
                             <!-- Left: Court -->
-                            <div class="bg-white p-6 rounded shadow-lg w-64 text-center opacity-60 fade-in-up delay-100">
+                            <div class="bg-white p-6 rounded shadow-lg w-64 text-center opacity-60 fade-in-up delay-100 slide4-card">
                                 <i data-lucide="building" class="w-10 h-10 mx-auto text-gray-400 mb-2"></i>
                                 <h4 class="font-bold text-gray-600">가정 법원</h4>
                                 <p class="text-xs text-gray-500 mt-2">이혼하러 가는 길<br>(절망, 실패, 아픔)</p>
@@ -280,7 +353,7 @@
                             </div>
 
                             <!-- Right: Church -->
-                            <div class="bg-white p-6 rounded shadow-xl w-64 text-center border-b-4 border-autumn-red scale-110 fade-in-up delay-300">
+                            <div class="bg-white p-6 rounded shadow-xl w-64 text-center border-b-4 border-autumn-red scale-110 fade-in-up delay-300 slide4-card">
                                 <i data-lucide="church" class="w-10 h-10 mx-auto text-autumn-red mb-2"></i>
                                 <h4 class="font-bold text-gray-900">성공회 성당</h4>
                                 <p class="text-xs text-gray-500 mt-2">하나님을 만나러 가는 길<br>(회복, 희망, 사랑)</p>
