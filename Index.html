@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>덕수궁 돌담길과 하나님의 언약</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f5f5f0;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, .serif {
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        /* 16:9 Container Constraints */
+        .slide-container {
+            width: 100%;
+            max-width: 1280px; /* Max width for large screens */
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Custom Scroll Snap for Slide effect */
+        .scroll-snap-wrapper {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            aspect-ratio: 16/9;
+            width: 100%;
+            min-height: 100vh; /* Fallback for mobile */
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        @media (min-aspect-ratio: 16/9) {
+            .slide {
+                min-height: auto;
+                height: 100vh; /* Fit to screen height if aspect ratio allows */
+            }
+        }
+
+        /* Stone Wall Pattern CSS */
+        .stone-wall {
+            background-color: #e5e5e5;
+            background-image: linear-gradient(335deg, rgba(0,0,0,0.05) 23px, transparent 23px),
+            linear-gradient(155deg, rgba(0,0,0,0.05) 23px, transparent 23px),
+            linear-gradient(335deg, rgba(0,0,0,0.05) 23px, transparent 23px),
+            linear-gradient(155deg, rgba(0,0,0,0.05) 23px, transparent 23px);
+            background-size: 58px 58px;
+            background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
+        }
+
+        /* Animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .slide.active .fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-500 { transition-delay: 0.5s; }
+
+        /* Custom Colors */
+        .text-autumn-red { color: #A0341F; }
+        .bg-autumn-red { background-color: #A0341F; }
+        .text-autumn-gold { color: #D69E2E; }
+        .bg-autumn-gold { background-color: #D69E2E; }
+        .text-stone-gray { color: #4A5568; }
+
+        /* Leaf Animation */
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #D69E2E;
+            border-radius: 2px 20px;
+            opacity: 0.6;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translate(0, -10%) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translate(50px, 120vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="scroll-snap-wrapper">
+        <div class="slide-container">
+
+            <!-- Slide 1: Intro / The Myth -->
+            <section class="slide stone-wall relative" id="slide1">
+                <div class="absolute inset-0 bg-white/90"></div>
+                <!-- Falling Leaves Background -->
+                <div class="leaf" style="left: 10%; animation-duration: 8s; animation-delay: 0s;"></div>
+                <div class="leaf" style="left: 30%; background:#A0341F; animation-duration: 12s; animation-delay: 2s;"></div>
+                <div class="leaf" style="left: 70%; animation-duration: 10s; animation-delay: 4s;"></div>
+                <div class="leaf" style="left: 90%; background:#A0341F; animation-duration: 7s; animation-delay: 1s;"></div>
+
+                <div class="relative z-10 max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="fade-in-up">
+                        <span class="text-autumn-red font-bold tracking-widest text-sm uppercase mb-2 block">Sermon Intro</span>
+                        <h1 class="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+                            덕수궁<br>
+                            <span class="text-autumn-red serif italic">돌담길</span>의<br>
+                            전설
+                        </h1>
+                        <div class="w-24 h-1 bg-gray-800 mb-6"></div>
+                        <p class="text-xl text-gray-700 leading-relaxed">
+                            "연인이 이 길을 걸으면 헤어진다"는<br>
+                            오래된 말이 있습니다.
+                        </p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-xl border-l-8 border-autumn-red fade-in-up delay-200">
+                        <div class="flex items-center mb-4 text-autumn-red">
+                            <i data-lucide="map-pin" class="w-8 h-8 mr-3"></i>
+                            <h3 class="text-2xl font-bold serif">왜 그런 말이 생겼을까요?</h3>
+                        </div>
+                        <p class="text-gray-600 text-lg mb-6">
+                            과거 이 길의 중간에 <br>
+                            <span class="font-bold text-gray-900 bg-yellow-100 px-1">이혼을 허락하는 가정법원</span>이<br>
+                            있었기 때문입니다.
+                        </p>
+                        <div class="flex items-center justify-between text-sm text-gray-500 border-t pt-4">
+                            <span>결혼의 약속</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            <span>법적인 파기</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 2: Biblical Context -->
+            <section class="slide bg-gray-900 text-white" id="slide2">
+                <div class="max-w-5xl mx-auto w-full">
+                    <div class="flex flex-col items-center text-center mb-12 fade-in-up">
+                        <i data-lucide="scale" class="w-16 h-16 text-autumn-gold mb-6"></i>
+                        <h2 class="text-4xl md:text-5xl font-bold serif mb-4">하나님은 이혼을 미워하실까?</h2>
+                        <p class="text-gray-400 text-lg">많은 사람들이 오해해왔던 하나님의 마음</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Misunderstanding -->
+                        <div class="bg-gray-800 p-8 rounded-lg fade-in-up delay-100 opacity-50 hover:opacity-100 transition-opacity">
+                            <h3 class="text-xl font-bold text-red-400 mb-3 flex items-center">
+                                <i data-lucide="x-circle" class="w-5 h-5 mr-2"></i> 오해 (Misunderstanding)
+                            </h3>
+                            <p class="text-gray-300 leading-relaxed">
+                                "이혼은 무조건 죄악이다."<br>
+                                이 생각은 종종 이혼한 사람들을<br>
+                                차별하고 정죄하는 도구로 사용되었습니다.
+                            </p>
+                        </div>
+                        
+                        <!-- Truth -->
+                        <div class="bg-gray-100 text-gray-900 p-8 rounded-lg border-l-8 border-autumn-gold fade-in-up delay-300 relative transform md:-translate-y-4 shadow-2xl">
+                            <div class="absolute -top-4 -right-4 bg-autumn-gold text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">!</div>
+                            <h3 class="text-xl font-bold text-autumn-red mb-3 flex items-center">
+                                <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i> 진실 (Original Meaning)
+                            </h3>
+                            <p class="text-lg font-bold mb-2">'내쫓다' (Shalach)</p>
+                            <p class="text-gray-700 leading-relaxed">
+                                하나님이 미워하시는 것은 법적인 절차가 아닙니다.<br>
+                                <strong>"힘 있는 자가 약한 자를 이용하고,<br>
+                                보호하지 않고 내쫓는 폭력"</strong>을<br>
+                                미워하시는 것입니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 3: Application (Reflection) -->
+            <section class="slide bg-white" id="slide3">
+                <div class="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-center h-full">
+                    <!-- Left Text -->
+                    <div class="md:col-span-5 fade-in-up">
+                        <h2 class="text-5xl font-bold serif text-gray-900 mb-8">
+                            이스라엘과<br>
+                            <span class="text-autumn-red">우리의 자화상</span>
+                        </h2>
+                        <div class="space-y-6">
+                            <div class="flex">
+                                <div class="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-autumn-red mr-4">1</div>
+                                <div>
+                                    <h4 class="font-bold text-lg">필요할 때만 찾는 관계</h4>
+                                    <p class="text-gray-600 text-sm">이스라엘은 불리해지면 하나님을 '내쫓고' 다른 우상을 의지했습니다.</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-autumn-red mr-4">2</div>
+                                <div>
+                                    <h4 class="font-bold text-lg">이웃을 향한 태도</h4>
+                                    <p class="text-gray-600 text-sm">이웃을 사랑하고 보듬고 있습니까? 아니면 나의 이익을 위해 이용하고 있습니까?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Visual Graphic -->
+                    <div class="md:col-span-7 h-full flex items-center justify-center relative fade-in-up delay-200">
+                        <!-- Abstract Mirror Concept -->
+                        <div class="relative w-80 h-96 bg-gray-200 rounded-t-full border-8 border-gray-300 overflow-hidden shadow-inner flex items-center justify-center">
+                            <div class="text-center p-6">
+                                <i data-lucide="heart-handshake" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                                <p class="text-gray-500 font-serif italic">
+                                    "우리는 하나님을<br>가장 중요한 분으로<br>인정하고 있는가?"
+                                </p>
+                            </div>
+                            <!-- Reflection effect -->
+                            <div class="absolute inset-0 bg-gradient-to-tr from-white/40 to-transparent pointer-events-none"></div>
+                        </div>
+                        
+                        <!-- Floating Cards -->
+                        <div class="absolute top-1/4 right-10 bg-autumn-red text-white p-4 rounded shadow-lg text-sm w-48">
+                            결혼은 강력한 <strong>약속</strong>입니다.
+                        </div>
+                        <div class="absolute bottom-1/4 left-0 bg-gray-800 text-white p-4 rounded shadow-lg text-sm w-48">
+                            폭력과 이용을 <strong>멈춰야</strong> 합니다.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 4: The Turn / Architecture -->
+            <section class="slide relative overflow-hidden" id="slide4" style="background: linear-gradient(to bottom, #fffaf0, #ffedd5);">
+                <!-- Background Elements -->
+                <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent z-10"></div>
+                
+                <div class="max-w-5xl mx-auto w-full text-center relative z-20">
+                    <div class="fade-in-up">
+                        <span class="inline-block py-1 px-3 border border-autumn-red text-autumn-red rounded-full text-xs font-bold tracking-widest mb-4">PERSPECTIVE SHIFT</span>
+                        <h2 class="text-4xl md:text-6xl font-bold serif text-gray-900 mb-8">다시, 돌담길 위에서</h2>
+                    </div>
+
+                    <div class="relative mt-12">
+                        <!-- Path visualization -->
+                        <div class="absolute left-1/2 transform -translate-x-1/2 top-0 h-full w-1 bg-dashed border-l-2 border-gray-400 h-64 z-0"></div>
+                        
+                        <div class="flex justify-center items-center gap-4 md:gap-20 relative z-10">
+                            <!-- Left: Court -->
+                            <div class="bg-white p-6 rounded shadow-lg w-64 text-center opacity-60 fade-in-up delay-100">
+                                <i data-lucide="building" class="w-10 h-10 mx-auto text-gray-400 mb-2"></i>
+                                <h4 class="font-bold text-gray-600">가정 법원</h4>
+                                <p class="text-xs text-gray-500 mt-2">이혼하러 가는 길<br>(절망, 실패, 아픔)</p>
+                            </div>
+
+                            <!-- Arrow -->
+                            <div class="text-autumn-red fade-in-up delay-200">
+                                <i data-lucide="arrow-right" class="w-8 h-8 md:hidden"></i>
+                                <span class="hidden md:block text-sm font-bold bg-white px-2 py-1 rounded shadow">조금만 더 걸으면</span>
+                            </div>
+
+                            <!-- Right: Church -->
+                            <div class="bg-white p-6 rounded shadow-xl w-64 text-center border-b-4 border-autumn-red scale-110 fade-in-up delay-300">
+                                <i data-lucide="church" class="w-10 h-10 mx-auto text-autumn-red mb-2"></i>
+                                <h4 class="font-bold text-gray-900">성공회 성당</h4>
+                                <p class="text-xs text-gray-500 mt-2">하나님을 만나러 가는 길<br>(회복, 희망, 사랑)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="mt-16 text-xl text-gray-800 font-serif italic fade-in-up delay-500">
+                        "같은 길이지만, 그 길 끝에 무엇을 보느냐에 따라<br>
+                        전혀 다른 길이 됩니다."
+                    </p>
+                </div>
+            </section>
+
+            <!-- Slide 5: Conclusion / Jesus -->
+            <section class="slide bg-autumn-red text-white relative" id="slide5">
+                <div class="absolute inset-0 bg-black/20"></div>
+                <div class="max-w-4xl mx-auto w-full text-center relative z-10">
+                    <div class="mb-8 fade-in-up">
+                        <i data-lucide="cross" class="w-20 h-20 mx-auto text-white/80 mb-6"></i>
+                    </div>
+                    
+                    <h2 class="text-3xl md:text-5xl font-bold serif mb-8 leading-normal fade-in-up delay-100">
+                        폭력이 가득한 세상 속에<br>
+                        자신을 내어 던지신 사랑
+                    </h2>
+
+                    <div class="bg-white/10 backdrop-blur-sm p-8 rounded-lg border border-white/20 text-left md:text-center fade-in-up delay-200">
+                        <p class="text-lg md:text-xl leading-relaxed font-light">
+                            예수님은 우리를 위해 모든 폭력을 홀로 참아내셨습니다.<br><br>
+                            나에게 유리한 것만 바라보면 삶은 폭력으로 남겠지만,<br>
+                            <span class="font-bold text-yellow-300">그 길 끝에 서 계신 예수님을 바라보며 걷는다면</span><br>
+                            그 길은 승리의 길이 됩니다.
+                        </p>
+                    </div>
+
+                    <div class="mt-12 fade-in-up delay-300">
+                        <button onclick="document.querySelector('.scroll-snap-wrapper').scrollTo({top: 0, behavior: 'smooth'})" 
+                                class="bg-white text-autumn-red hover:bg-gray-100 px-8 py-3 rounded-full font-bold transition-all flex items-center mx-auto shadow-lg group">
+                            <i data-lucide="refresh-ccw" class="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-500"></i>
+                            처음으로 돌아가기
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Decorative Footer -->
+                <div class="absolute bottom-4 left-0 w-full text-center text-white/40 text-xs">
+                    Sunday Message Infographic
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            root: document.querySelector('.scroll-snap-wrapper'),
+            threshold: 0.3
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide').forEach(slide => {
+            observer.observe(slide);
+        });
+    </script>
+</body>
+</html>
