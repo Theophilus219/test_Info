@@ -1,325 +1,229 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>그 길 끝에 서 계신 분 - 덕수궁 돌담길 설교</title>
-    <style>
-        :root {
-            --bg-color: #fdfbf7;
-            --text-color: #333;
-            --accent-color: #d35400; /* 단풍색 */
-            --stone-color: #7f8c8d;
-            --gold-color: #f1c40f;
-            --path-color: #e0e0e0;
-        }
+import React, { useState, useEffect } from 'react';
+import { ChevronRight, ChevronLeft, Heart, HeartCrack, Gavel, BookOpen, ShieldAlert, Footprints, Church, Cross, ArrowRight } from 'lucide-react';
 
-        body {
-            font-family: 'KoPub Batang', 'Nanum Myeongjo', serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.8;
-            overflow-x: hidden;
-        }
+const SermonCard = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-        /* 타이포그래피 */
-        h1, h2, h3 {
-            font-weight: 700;
-            word-break: keep-all;
-        }
+  // 설교 데이터를 카드별로 구조화
+  const slides = [
+    {
+      id: 0,
+      theme: "intro",
+      icon: <HeartCrack className="w-12 h-12 text-rose-500" />,
+      title: "덕수궁 돌담길의 전설",
+      content: "한국에는 '덕수궁 돌담길'을 연인이 함께 걸으면 결국 헤어지게 된다는 슬픈 전설이 있습니다.",
+      subContent: "왜 이런 말이 생겨났을까요?",
+      bgColor: "bg-stone-100",
+      accentColor: "text-rose-600"
+    },
+    {
+      id: 1,
+      theme: "fact",
+      icon: <Gavel className="w-12 h-12 text-slate-600" />,
+      title: "전설의 배경",
+      content: "과거, 이 길의 중간에는 이혼을 허락하는 '가정 법원'이 있었습니다.",
+      subContent: "결혼이라는 강력한 법적 약속을 깨기 위해선, 반드시 이 길을 지나 법원의 허락을 받아야 했기 때문입니다.",
+      bgColor: "bg-slate-50",
+      accentColor: "text-slate-700"
+    },
+    {
+      id: 2,
+      theme: "misconception",
+      icon: <BookOpen className="w-12 h-12 text-amber-600" />,
+      title: "오해: 하나님과 이혼",
+      content: "\"하나님은 이혼을 미워하신다\"",
+      subContent: "이 말씀은 오랫동안 이혼한 사람들을 정죄하고 차별하는 근거로 잘못 이해되어 왔습니다.",
+      bgColor: "bg-amber-50",
+      accentColor: "text-amber-700"
+    },
+    {
+      id: 3,
+      theme: "truth",
+      icon: <ShieldAlert className="w-12 h-12 text-emerald-600" />,
+      title: "진실: 폭력에 대한 미움",
+      content: "성경 원어의 의미는 '내쫓다' 입니다.",
+      subContent: "하나님이 진짜 미워하시는 것은 이혼 서류가 아니라, 강한 자가 욕망을 위해 약한 자를 이용하고 보호하지 않고 내쫓는 '폭력' 그 자체입니다.",
+      bgColor: "bg-emerald-50",
+      accentColor: "text-emerald-700"
+    },
+    {
+      id: 4,
+      theme: "reflection",
+      icon: <Heart className="w-12 h-12 text-indigo-500" />,
+      title: "우리의 모습 돌아보기",
+      content: "이스라엘은 필요할 때만 하나님을 찾고, 불리하면 내쫓았습니다.",
+      subContent: "우리도 하나님을, 혹은 이웃을 나의 이익을 위해 이용하고 있지는 않나요? 그것이 하나님이 미워하시는 폭력입니다.",
+      bgColor: "bg-indigo-50",
+      accentColor: "text-indigo-700"
+    },
+    {
+      id: 5,
+      theme: "twist",
+      icon: <Footprints className="w-12 h-12 text-orange-600" />,
+      title: "돌담길의 반전",
+      content: "가을 단풍이 아름다운 이 길.",
+      subContent: "법원을 지나 끝까지 걸어가면, 아름다운 '성공회 서울대주교 성당'이 나옵니다. 같은 길이지만 끝은 다릅니다.",
+      bgColor: "bg-orange-50",
+      accentColor: "text-orange-700"
+    },
+    {
+      id: 6,
+      theme: "conclusion",
+      icon: <Church className="w-12 h-12 text-blue-600" />,
+      title: "시선의 차이",
+      content: "법원만 바라보면 '이혼하러 가는 길'이지만,\n그 너머를 보면 '하나님을 만나러 가는 길'이 됩니다.",
+      subContent: "나에게 유리한 것만 보면 폭력이 남지만, 길 끝의 하나님을 바라보면 전혀 다른 길이 열립니다.",
+      bgColor: "bg-blue-50",
+      accentColor: "text-blue-700"
+    },
+    {
+      id: 7,
+      theme: "final",
+      icon: <Cross className="w-12 h-12 text-purple-600" />,
+      title: "예수님을 쫓아가는 길",
+      content: "예수님은 폭력이 가득한 세상에서 우릴 위해 모든 폭력을 참아내셨습니다.",
+      subContent: "그분의 희생과 사랑을 기억하며 걷는 것.\n그것이 오늘 우리에게 주시는 메시지입니다.",
+      bgColor: "bg-purple-50",
+      accentColor: "text-purple-700"
+    }
+  ];
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-        }
+  const handleNext = () => {
+    if (currentSlide < slides.length - 1) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentSlide(prev => prev + 1);
+        setIsAnimating(false);
+      }, 300);
+    }
+  };
 
-        /* 타임라인 (길) 효과 */
-        .path-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: repeating-linear-gradient(
-                to bottom,
-                var(--stone-color),
-                var(--stone-color) 10px,
-                transparent 10px,
-                transparent 20px
-            );
-            transform: translateX(-50%);
-            z-index: -1;
-            opacity: 0.3;
-        }
+  const handlePrev = () => {
+    if (currentSlide > 0) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentSlide(prev => prev - 1);
+        setIsAnimating(false);
+      }, 300);
+    }
+  };
 
-        /* 섹션 공통 스타일 */
-        section {
-            min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 50px;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease-out;
-        }
+  // 키보드 방향키 지원
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrev();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentSlide]);
 
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+  const slide = slides[currentSlide];
+  const progress = ((currentSlide + 1) / slides.length) * 100;
 
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border: 1px solid #eee;
-            width: 90%;
-            position: relative;
-        }
+  return (
+    <div className={`min-h-screen w-full flex items-center justify-center p-4 transition-colors duration-700 ${slide.bgColor}`}>
+      
+      {/* Main Card Container */}
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden relative flex flex-col min-h-[600px]">
+        
+        {/* Progress Bar */}
+        <div className="w-full h-2 bg-gray-100">
+          <div 
+            className={`h-full transition-all duration-500 ease-out rounded-r-full ${slide.theme === 'final' ? 'bg-purple-500' : 'bg-gray-800'}`}
+            style={{ width: `${progress}%` }}
+          />
+        </div>
 
-        /* 1. 서론: 돌담길 */
-        .intro-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
-        }
+        {/* Content Area */}
+        <div className="flex-1 p-8 flex flex-col items-center justify-center relative">
+          
+          {/* Animated Transition Wrapper */}
+          <div className={`flex flex-col items-center text-center space-y-6 transition-all duration-300 transform ${isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+            
+            {/* Icon Circle */}
+            <div className="mb-4 p-6 rounded-full bg-white shadow-lg ring-4 ring-opacity-10 ring-black animate-float">
+              {slide.icon}
+            </div>
 
+            {/* Title */}
+            <h2 className={`text-2xl font-bold ${slide.accentColor} mb-2`}>
+              {slide.title}
+            </h2>
+
+            {/* Divider */}
+            <div className="w-12 h-1 bg-gray-200 rounded-full my-4"></div>
+
+            {/* Main Content */}
+            <p className="text-xl font-medium text-gray-800 leading-relaxed break-keep">
+              {slide.content}
+            </p>
+
+            {/* Sub Content */}
+            <div className={`mt-4 p-4 rounded-xl bg-opacity-50 ${slide.bgColor} border border-opacity-10 border-black`}>
+              <p className="text-base text-gray-600 leading-relaxed break-keep font-light">
+                {slide.subContent}
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Navigation Area */}
+        <div className="p-6 bg-white border-t border-gray-100">
+          <div className="flex justify-between items-center">
+            
+            {/* Prev Button */}
+            <button 
+              onClick={handlePrev}
+              disabled={currentSlide === 0}
+              className={`p-3 rounded-full transition-all duration-200 ${currentSlide === 0 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100 hover:scale-110'}`}
+            >
+              <ChevronLeft size={28} />
+            </button>
+
+            {/* Pagination Indicator */}
+            <span className="text-sm font-medium text-gray-400 font-mono">
+              {currentSlide + 1} / {slides.length}
+            </span>
+
+            {/* Next Button */}
+            <button 
+              onClick={handleNext}
+              disabled={currentSlide === slides.length - 1}
+              className={`p-3 rounded-full transition-all duration-200 ${
+                currentSlide === slides.length - 1 
+                  ? 'text-gray-300 cursor-not-allowed' 
+                  : `text-white hover:scale-110 shadow-lg ${slide.theme === 'final' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-gray-800 hover:bg-gray-900'}`
+              }`}
+            >
+              {currentSlide === slides.length - 1 ? <div className="w-7 h-7 flex items-center justify-center">✓</div> : <ChevronRight size={28} />}
+            </button>
+          </div>
+          
+          {currentSlide === 0 && (
+            <p className="text-center text-xs text-gray-400 mt-4 animate-pulse">
+              카드를 넘겨 이야기를 시작하세요
+            </p>
+          )}
+        </div>
+
+      </div>
+
+      {/* Background Decorative Elements */}
+      <style>{`
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+          100% { transform: translateY(0px); }
         }
-
-        /* 2. 본론: 오해와 진실 (플립 카드) */
-        .flip-container {
-            perspective: 1000px;
-            width: 100%;
-            height: 300px;
-            cursor: pointer;
+        .animate-float {
+          animation: float 4s ease-in-out infinite;
         }
-        
-        .flipper {
-            transition: 0.6s;
-            transform-style: preserve-3d;
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .flip-container.hover .flipper {
-            transform: rotateY(180deg);
-        }
-
-        .front, .back {
-            backface-visibility: hidden;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .front {
-            background-color: #fff;
-            color: #333;
-            border: 2px solid #ddd;
-        }
-
-        .back {
-            background-color: var(--accent-color);
-            color: white;
-            transform: rotateY(180deg);
-        }
-
-        .instruction {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 10px;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink { 50% { opacity: 0.5; } }
-
-        /* 3. 적용: 약속 */
-        .promise-box {
-            border-left: 5px solid var(--accent-color);
-            text-align: left;
-            padding-left: 20px;
-            margin-top: 20px;
-            font-style: italic;
-        }
-
-        /* 4. 결론: 인터렉티브 엔딩 */
-        .choice-btn-container {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .btn-court { background-color: #95a5a6; color: white; }
-        .btn-church { background-color: var(--gold-color); color: white; }
-        
-        .btn:hover { transform: scale(1.05); }
-
-        .ending-scene {
-            transition: all 0.5s ease;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .ending-court {
-            background-color: #f0f0f0;
-            color: #555;
-        }
-
-        .ending-church {
-            background-color: #fff8e1;
-            border: 2px solid var(--gold-color);
-            color: #333;
-        }
-        
-        .highlight {
-            background: linear-gradient(to top, #ffeebb 50%, transparent 50%);
-        }
-
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <div class="path-line"></div>
-
-        <section id="intro" class="visible">
-            <div class="intro-icon">🍂 🧱</div>
-            <h1>덕수궁 돌담길</h1>
-            <div class="card">
-                <p>한국에는 <strong>'덕수궁 돌담길'</strong>이라는 아름다운 길이 있습니다.<br>하지만 연인들이 이 길을 걸으면 헤어진다는 슬픈 전설이 있죠.</p>
-                <hr>
-                <p>왜냐하면 예전에 이 길의 중간에<br><strong>이혼을 허락하는 가정 법원</strong>이 있었기 때문입니다.</p>
-            </div>
-            <p>⬇️ 아래로 걸어가 봅시다 ⬇️</p>
-        </section>
-
-        <section id="misunderstanding">
-            <h2>"하나님은 이혼을 미워하신다?"</h2>
-            <p>이 말씀은 오랫동안 사람들에게 상처를 주기도 했습니다.</p>
-            
-            <div class="flip-container" onclick="this.classList.toggle('hover')">
-                <div class="flipper">
-                    <div class="front">
-                        <h3>❌ 오해 (Misunderstanding)</h3>
-                        <p>이혼한 사실 자체가 죄다?</p>
-                        <p>이혼한 사람을 차별하고 정죄하는 근거?</p>
-                        <div class="instruction">👆 카드를 탭하여 진짜 의미를 확인하세요</div>
-                    </div>
-                    <div class="back">
-                        <h3>⭕ 진실 (Truth)</h3>
-                        <p>원어의 의미: <strong>"내쫓다 (Sending Away)"</strong></p>
-                        <p>하나님이 미워하시는 것은 '제도'가 아니라<br>강자가 약자를 이용하고 버리는<br><strong>'폭력'</strong>입니다.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="application">
-            <div class="intro-icon">🤝 💔</div>
-            <h2>깨어진 약속, 내쫓는 마음</h2>
-            <div class="card">
-                <p>이스라엘에게 하나님과의 관계는 <strong>'결혼'</strong>과 같았습니다.<br>하지만 그들은 필요할 때만 하나님을 찾고, 불리해지면 우상을 찾으며 하나님을 <strong>내쫓았습니다.</strong></p>
-            </div>
-            <div class="promise-box">
-                <p>"우리는 어떤가요? 나에게 유리할 때만 이웃을 찾고, 하나님을 찾고 있지는 않나요? 그것은 관계가 아니라 <strong>이용</strong>입니다."</p>
-            </div>
-        </section>
-
-        <section id="conclusion">
-            <h2>길의 끝에서 무엇을 보는가?</h2>
-            <p>덕수궁 돌담길, 다시 그 길을 걷습니다.<br>가을 단풍이 예쁜 이 길 끝에는 두 가지 건물이 있습니다.</p>
-            
-            <p>당신은 무엇을 바라보며 걸으시겠습니까?</p>
-            
-            <div class="choice-btn-container">
-                <button class="btn btn-court" onclick="showEnding('court')">⚖️ 가정 법원</button>
-                <button class="btn btn-church" onclick="showEnding('church')">⛪️ 십자가 (성당)</button>
-            </div>
-
-            <div id="ending-content" class="ending-scene" style="display:none;">
-                </div>
-        </section>
+      `}</style>
     </div>
+  );
+};
 
-    <script>
-        // 1. 스크롤 애니메이션 (Intersection Observer)
-        const observerOptions = {
-            threshold: 0.2
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
-        });
-
-        // 2. 엔딩 인터렉션 로직
-        function showEnding(type) {
-            const contentBox = document.getElementById('ending-content');
-            contentBox.style.display = 'block';
-            contentBox.style.opacity = 0;
-            
-            setTimeout(() => {
-                if (type === 'court') {
-                    contentBox.className = 'ending-scene ending-court';
-                    contentBox.innerHTML = `
-                        <h3>⚖️ 법원만 바라본다면...</h3>
-                        <p>이 길은 단지 <strong>'이혼하러 가는 길'</strong>이 됩니다.</p>
-                        <p>나에게 유리한 것만 찾다 보면,<br>우리 삶에는 결국 차가운 계산과 폭력만 남게 될 것입니다.</p>
-                    `;
-                } else {
-                    contentBox.className = 'ending-scene ending-church';
-                    contentBox.innerHTML = `
-                        <h3>⛪️ 하나님을 바라본다면...</h3>
-                        <p>이 길은 <strong>'하나님을 만나러 가는 길'</strong>이 됩니다.</p>
-                        <p>길 끝에 계신 예수님은 <span class="highlight">우리를 위해 모든 폭력을 참아내셨습니다.</span></p>
-                        <p>같은 고통 속에서도 그분을 바라볼 때,<br>우리의 길은 전혀 다른, <strong>사랑의 길</strong>이 됩니다.</p>
-                    `;
-                }
-                contentBox.style.opacity = 1;
-            }, 100);
-        }
-    </script>
-</body>
-</html>
+export default SermonCard;
