@@ -3,568 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>하나님이 미워하는 것</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>덕수궁 돌담길: 그 길 끝에 있는 것</title>
     <style>
+        :root {
+            --stone-gray: #5D5C61;
+            --autumn-orange: #D98324;
+            --autumn-yellow: #E6B325;
+            --deep-red: #A43820;
+            --cream: #F5F5F5;
+            --text-dark: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f5f5f0;
-            margin: 0;
-            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--cream);
+            color: var(--text-dark);
+            line-height: 1.6;
             overflow-x: hidden;
         }
-        
-        h1, h2, h3, .serif {
-            font-family: 'Noto Serif KR', serif;
-        }
 
-        /* 16:9 Container Constraints */
-        .slide-container {
-            width: 100%;
-            max-width: 1280px;
-            margin: 0 auto;
-            background-color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Custom Scroll Snap for Slide effect */
-        .scroll-snap-wrapper {
+        /* Header Section */
+        header {
             height: 100vh;
-            height: 100dvh;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .slide {
-            aspect-ratio: 16/9;
-            width: 100%;
-            min-height: 100vh;
-            scroll-snap-align: start;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1509664158680-293644c970dd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        header h1 { font-size: 3rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        header p { font-size: 1.2rem; max-width: 600px; margin-bottom: 40px; }
+        .scroll-down {
+            animation: bounce 2s infinite;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px 20px;
             position: relative;
-            padding: 2rem;
-            box-sizing: border-box;
         }
 
-        @media (min-aspect-ratio: 16/9) {
-            .slide {
-                min-height: auto;
-                height: 100vh;
-            }
+        /* Road Line */
+        .road-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--stone-gray);
+            transform: translateX(-50%);
+            z-index: 0;
         }
 
-        /* Mobile optimization */
-        @media (max-width: 768px) {
-            body {
-                background-color: #ffffff;
-            }
+        /* Section Styling */
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 50px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+            border-left: 5px solid var(--autumn-orange);
+        }
+        .section.visible { opacity: 1; transform: translateY(0); }
 
-            .slide-container {
-                max-width: 100%;
-                box-shadow: none;
-                border-radius: 0;
-            }
+        h2 { color: var(--deep-red); margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        /* Interactive Card Flip */
+        .flip-container { perspective: 1000px; margin: 20px 0; cursor: pointer; height: 200px; }
+        .flipper {
+            transition: 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+            height: 100%;
+        }
+        .flip-container.hover .flipper { transform: rotateY(180deg); }
+        .front, .back {
+            width: 100%; height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .front { background-color: var(--stone-gray); color: white; }
+        .back { background-color: var(--autumn-orange); color: white; transform: rotateY(180deg); }
+        .hint { font-size: 0.8rem; margin-top: 10px; opacity: 0.8; }
 
-            .scroll-snap-wrapper {
-                height: 100dvh;
-            }
-
-            .slide {
-                aspect-ratio: auto;
-                min-height: 100dvh;
-                padding: 1.5rem 1rem;
-            }
-
-            h1 {
-                font-size: 2.25rem;
-                line-height: 1.25;
-            }
-
-            h2 {
-                font-size: 1.75rem;
-            }
-
-            p {
-                font-size: 0.95rem;
-            }
-
-            .mobile-gap-sm {
-                gap: 1.5rem !important;
-            }
-
-            .slide4-flex {
-                flex-direction: column;
-                gap: 1.25rem;
-            }
-
-            .slide4-card {
-                width: 100% !important;
-                max-width: 260px;
-                margin: 0 auto;
-            }
+        /* Highlight Box */
+        .highlight-box {
+            background-color: #FFF3E0;
+            border-left: 4px solid var(--autumn-yellow);
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
         }
 
-        /* Stone Wall Pattern CSS */
-        .stone-wall {
-            background-color: #e5e5e5;
-            background-image: linear-gradient(335deg, rgba(0,0,0,0.05) 23px, transparent 23px),
-            linear-gradient(155deg, rgba(0,0,0,0.05) 23px, transparent 23px),
-            linear-gradient(335deg, rgba(0,0,0,0.05) 23px, transparent 23px),
-            linear-gradient(155deg, rgba(0,0,0,0.05) 23px, transparent 23px);
-            background-size: 58px 58px;
-            background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
+        /* Comparison Table */
+        .comparison {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
         }
+        .comp-box {
+            flex: 1;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .comp-box h3 { font-size: 1rem; color: var(--text-dark); margin-bottom: 10px; }
+
+        /* Final Message */
+        .final-section {
+            text-align: center;
+            background: var(--deep-red);
+            color: white;
+            border-left: none;
+        }
+        .final-section h2 { color: white; border-color: rgba(255,255,255,0.3); }
 
         /* Animations */
-        .fade-in-up {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        
-        .slide.active .fade-in-up {
-            opacity: 1;
-            transform: translateY(0);
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
         }
 
-        .delay-100 { transition-delay: 0.1s; }
-        .delay-200 { transition-delay: 0.2s; }
-        .delay-300 { transition-delay: 0.3s; }
-        .delay-500 { transition-delay: 0.5s; }
-
-        /* Custom Colors */
-        .text-autumn-red { color: #A0341F; }
-        .bg-autumn-red { background-color: #A0341F; }
-        .text-autumn-gold { color: #D69E2E; }
-        .bg-autumn-gold { background-color: #D69E2E; }
-        .text-stone-gray { color: #4A5568; }
-
-        /* Leaf Animation */
-        .leaf {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #D69E2E;
-            border-radius: 2px 20px;
-            opacity: 0.6;
-            animation: fall linear infinite;
-        }
-        @keyframes fall {
-            0% { transform: translate(0, -10%) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.8; }
-            100% { transform: translate(50px, 120vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* Bilingual helpers */
-        .en-sub {
-            display: block;
-            font-size: 0.75rem;
-            line-height: 1.4;
-            opacity: 0.7;
-            margin-top: 0.25rem;
-        }
-
-        .en-sub-lg {
-            display: block;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            opacity: 0.75;
-            margin-top: 0.5rem;
-        }
-
-        @media (min-width: 768px) {
-            .en-sub {
-                font-size: 0.8rem;
-            }
-            .en-sub-lg {
-                font-size: 0.9rem;
-            }
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            .section { margin: 30px 0; padding: 20px; }
+            .comparison { flex-direction: column; }
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body>
 
-    <div class="scroll-snap-wrapper">
-        <div class="slide-container">
+    <header>
+        <h1>덕수궁 돌담길</h1>
+        <p>그 길을 함께 걷다 보면 만나는 두 가지 끝</p>
+        <div class="scroll-down" onclick="document.querySelector('.container').scrollIntoView({behavior: 'smooth'})">
+            ⬇
+        </div>
+    </header>
 
-            <!-- Slide 1: Intro / The Myth -->
-            <section class="slide stone-wall relative" id="slide1">
-                <div class="absolute inset-0 bg-white/90"></div>
-                <!-- Falling Leaves Background -->
-                <div class="leaf" style="left: 10%; animation-duration: 8s; animation-delay: 0s;"></div>
-                <div class="leaf" style="left: 30%; background:#A0341F; animation-duration: 12s; animation-delay: 2s;"></div>
-                <div class="leaf" style="left: 70%; animation-duration: 10s; animation-delay: 4s;"></div>
-                <div class="leaf" style="left: 90%; background:#A0341F; animation-duration: 7s; animation-delay: 1s;"></div>
+    <div class="container">
+        <div class="road-line"></div>
 
-                <div class="relative z-10 max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 mobile-gap-sm items-center">
-                    <div class="fade-in-up">
-                        <span class="text-autumn-red font-bold tracking-widest text-sm uppercase mb-2 block">
-                            설교 인트로
-                            <span class="en-sub">Sermon Intro</span>
-                        </span>
-                        <h1 class="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-                            하나님이<br>
-                            <span class="text-autumn-red serif italic">미워하는</span><br>
-                            것
-                            <span class="en-sub-lg font-normal not-italic">What God Hates</span>
-                        </h1>
-                        <div class="w-24 h-1 bg-gray-800 mb-6"></div>
-                        <p class="text-xl text-gray-700 leading-relaxed">
-                            "연인이 덕수궁 돌담길을 걸으면 헤어진다"는 오래된 말이 있습니다.
-                            <span class="en-sub-lg">
-                                There is an old saying: "Couples who walk the Deoksugung Stone Wall road will eventually break up."
-                            </span>
-                        </p>
-                    </div>
-                    <div class="bg-white p-8 rounded-lg shadow-xl border-l-8 border-autumn-red fade-in-up delay-200">
-                        <div class="flex items-center mb-4 text-autumn-red">
-                            <i data-lucide="map-pin" class="w-8 h-8 mr-3"></i>
-                            <h3 class="text-2xl font-bold serif">
-                                왜 그런 말이 생겼을까요?
-                                <span class="en-sub">Why did such a saying arise?</span>
-                            </h3>
-                        </div>
-                        <p class="text-gray-600 text-lg mb-6">
-                            과거 이 길의 중간에 
-                            <br>
-                            <span class="font-bold text-gray-900 bg-yellow-100 px-1">이혼을 허락하는 가정법원</span>이
-                            <br>
-                            있었기 때문입니다.
-                            <span class="en-sub-lg">
-                                It is because there used to be a family court in the middle of this road that granted divorces.
-                            </span>
-                        </p>
-                        <div class="flex items-center justify-between text-sm text-gray-500 border-t pt-4">
-                            <span>
-                                결혼의 약속
-                                <span class="en-sub">The promise of marriage</span>
-                            </span>
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                            <span>
-                                법적인 파기
-                                <span class="en-sub">Legal dissolution</span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </section>
+        <div class="section">
+            <h2>🧱 돌담길의 전설</h2>
+            <p>한국에는 <strong>'덕수궁 돌담길'</strong>이라는 아름다운 길이 있습니다. 하지만 연인들 사이에는 무서운 소문이 하나 있습니다.</p>
+            <div class="highlight-box">
+                "이 길을 걸은 연인은 결국 헤어지게 된다."
+            </div>
+            <p>왜 이런 말이 생겼을까요? 바로 이 길 중간에 이혼을 허락하는 <strong>가정 법원</strong>이 있었기 때문입니다.</p>
+        </div>
 
-            <!-- Slide 2: Biblical Context -->
-            <section class="slide bg-gray-900 text-white" id="slide2">
-                <div class="max-w-5xl mx-auto w-full">
-                    <div class="flex flex-col items-center text-center mb-12 fade-in-up">
-                        <i data-lucide="scale" class="w-16 h-16 text-autumn-gold mb-6"></i>
-                        <h2 class="text-4xl md:text-5xl font-bold serif mb-4">
-                            하나님은 이혼을 미워하실까?
-                            <span class="en-sub-lg">Does God Hate Divorce?</span>
-                        </h2>
-                        <p class="text-gray-400 text-lg">
-                            많은 사람들이 오해해왔던 하나님의 마음
-                            <span class="en-sub">The heart of God that many have misunderstood</span>
-                        </p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mobile-gap-sm">
-                        <!-- Misunderstanding -->
-                        <div class="bg-gray-800 p-8 rounded-lg fade-in-up delay-100 opacity-50 hover:opacity-100 transition-opacity">
-                            <h3 class="text-xl font-bold text-red-400 mb-3 flex items-center">
-                                <i data-lucide="x-circle" class="w-5 h-5 mr-2"></i> 
-                                오해 (Misunderstanding)
-                            </h3>
-                            <p class="text-gray-300 leading-relaxed">
-                                "이혼은 무조건 죄악이다." 라는 생각은
-                                종종 이혼한 사람들을 차별하고 정죄하는
-                                도구로 사용되었습니다.
-                                <span class="en-sub-lg">
-                                    The idea that "divorce is always sinful" has often been used as a tool
-                                    to discriminate against and condemn those who are divorced.
-                                </span>
-                            </p>
-                        </div>
-                        
-                        <!-- Truth -->
-                        <div class="bg-gray-100 text-gray-900 p-8 rounded-lg border-l-8 border-autumn-gold fade-in-up delay-300 relative transform md:-translate-y-4 shadow-2xl">
-                            <div class="absolute -top-4 -right-4 bg-autumn-gold text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">!</div>
-                            <h3 class="text-xl font-bold text-autumn-red mb-3 flex items-center">
-                                <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i> 
-                                진실 (Original Meaning)
-                            </h3>
-                            <p class="text-lg font-bold mb-2">
-                                '내쫓다' (Shalach)
-                                <span class="en-sub">"To send away" or "to drive out" (Shalach)</span>
-                            </p>
-                            <p class="text-gray-700 leading-relaxed">
-                                하나님이 미워하시는 것은 단지 
-                                <strong>법적인 절차</strong> 그 자체가 아닙니다.
-                                <br>
-                                <strong>"힘 있는 자가 약한 자를 이용하고,<br>
-                                보호하지 않고 내쫓는 폭력"</strong>을 
-                                미워하시는 것입니다.
-                                <span class="en-sub-lg">
-                                    What God hates is not merely the <strong>legal procedure</strong> itself,
-                                    but the <strong>violence of the powerful using the weak, failing to protect them,
-                                    and driving them out</strong>.
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Slide 3: Application (Reflection) -->
-            <section class="slide bg-white" id="slide3">
-                <div class="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-center h-full">
-                    <!-- Left Text -->
-                    <div class="md:col-span-5 fade-in-up">
-                        <h2 class="text-4xl md:text-5xl font-bold serif text-gray-900 mb-8">
-                            이스라엘과<br>
-                            <span class="text-autumn-red">우리의 자화상</span>
-                            <span class="en-sub-lg font-normal text-gray-700">
-                                Israel and the Portrait of Ourselves
-                            </span>
-                        </h2>
-                        <div class="space-y-6">
-                            <div class="flex">
-                                <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-full flex items-center justify-center text-autumn-red mr-4 text-sm md:text-base">
-                                    1
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-base md:text-lg">
-                                        필요할 때만 찾는 관계
-                                        <span class="en-sub font-normal">A relationship only when we need Him</span>
-                                    </h4>
-                                    <p class="text-gray-600 text-sm md:text-base">
-                                        이스라엘은 불리해지면 하나님을 '내쫓고' 다른 우상을 의지했습니다.
-                                        <span class="en-sub">
-                                            When things turned unfavorable, Israel "sent God away" and relied on other idols.
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="flex">
-                                <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-full flex items-center justify-center text-autumn-red mr-4 text-sm md:text-base">
-                                    2
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-base md:text-lg">
-                                        이웃을 향한 태도
-                                        <span class="en-sub font-normal">Our attitude toward our neighbors</span>
-                                    </h4>
-                                    <p class="text-gray-600 text-sm md:text-base">
-                                        이웃을 사랑하고 보듬고 있습니까? 
-                                        아니면 나의 이익을 위해 이용하고 있습니까?
-                                        <span class="en-sub">
-                                            Do we truly love and embrace our neighbors,
-                                            or do we use them for our own benefit?
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Visual Graphic -->
-                    <div class="md:col-span-7 h-full flex items-center justify-center fade-in-up delay-200">
-                        <div class="flex flex-col md:flex-row items-center md:items-stretch gap-6 w-full max-w-xl">
-                            <!-- Abstract Mirror Concept -->
-                            <div class="relative w-56 h-72 md:w-72 md:h-80 bg-gray-200 rounded-t-full border-8 border-gray-300 overflow-hidden shadow-inner flex items-center justify-center">
-                                <div class="text-center p-4 md:p-6">
-                                    <i data-lucide="heart-handshake" class="w-12 h-12 md:w-16 md:h-16 text-gray-400 mx-auto mb-4"></i>
-                                    <p class="text-gray-500 font-serif italic text-sm md:text-base">
-                                        "우리는 하나님을<br>가장 중요한 분으로<br>인정하고 있는가?"
-                                        <span class="en-sub">
-                                            "Do we truly acknowledge God
-                                            as the most important One in our lives?"
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="absolute inset-0 bg-gradient-to-tr from-white/40 to-transparent pointer-events-none"></div>
-                            </div>
-                            
-                            <!-- Floating Cards -->
-                            <div class="flex flex-col gap-3 w-full md:w-52">
-                                <div class="bg-autumn-red text-white p-4 rounded shadow-lg text-xs md:text-sm w-full">
-                                    결혼은 강력한 <strong>약속</strong>입니다.
-                                    <span class="en-sub">
-                                        Marriage is a profound and binding <strong>covenant</strong>.
-                                    </span>
-                                </div>
-                                <div class="bg-gray-800 text-white p-4 rounded shadow-lg text-xs md:text-sm w-full">
-                                    폭력과 이용을 <strong>멈춰야</strong> 합니다.
-                                    <span class="en-sub">
-                                        We must <strong>stop</strong> all forms of violence and exploitation.
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Slide 4: The Turn / Architecture -->
-            <section class="slide relative overflow-hidden" id="slide4" style="background: linear-gradient(to bottom, #fffaf0, #ffedd5);">
-                <!-- Background Elements -->
-                <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent z-10"></div>
-                
-                <div class="max-w-5xl mx-auto w-full text-center relative z-20">
-                    <!-- 제목 / Title -->
-                    <div class="fade-in-up">
-                        <span class="inline-block py-1 px-3 border border-autumn-red text-autumn-red rounded-full text-xs font-bold tracking-widest mb-4">
-                            같은 길, 다른 끝
-                            <span class="en-sub">Same Road, Different Ending</span>
-                        </span>
-                        <h2 class="text-4xl md:text-6xl font-bold serif text-gray-900 mb-8">
-                            덕수궁 돌담길 위에서
-                            <span class="en-sub-lg font-normal text-gray-700">
-                                On the Deoksugung Stone Wall Road
-                            </span>
-                        </h2>
-                    </div>
+        <div class="section">
+            <h2>📖 오해와 진실: '이혼'</h2>
+            <p>성경은 "하나님이 이혼을 미워하신다"고 말합니다. 우리는 이 말을 어떻게 이해해왔을까요?</p>
+            <p><strong>아래 카드를 클릭(터치)하여 진정한 의미를 확인해보세요.</strong></p>
             
-                    <!-- Path & 두 건물: 가정법원 vs 성당 -->
-                    <div class="relative mt-12">
-                        <!-- 세로 길 표시 / Vertical path line -->
-                        <div class="absolute left-1/2 transform -translate-x-1/2 top-0 h-full w-1 bg-dashed border-l-2 border-gray-400 h-64 z-0"></div>
-                        
-                        <div class="flex justify-center items-center gap-4 md:gap-20 relative z-10 slide4-flex">
-                            <!-- Left: 가정법원 / Family Court -->
-                            <div class="bg-white p-6 rounded shadow-lg w-64 text-center opacity-80 fade-in-up delay-100 slide4-card">
-                                <i data-lucide="building" class="w-10 h-10 mx-auto text-gray-400 mb-2"></i>
-                                <h4 class="font-bold text-gray-600">
-                                    이혼을 허락하는 가정법원
-                                    <span class="en-sub">Family Court that Grants Divorce</span>
-                                </h4>
-                                <p class="text-xs text-gray-500 mt-2">
-                                    이 지점까지만 보면, 이 길은 <strong>이혼하러 가는 길</strong>처럼 보입니다.
-                                    <span class="en-sub">
-                                        If you stop here, this road looks like a road <strong>toward divorce</strong>.
-                                    </span>
-                                </p>
-                            </div>
+            <div class="flip-container" onclick="this.classList.toggle('hover')">
+                <div class="flipper">
+                    <div class="front">
+                        <h3>우리의 오해</h3>
+                        <p>"이혼이라는 법적 상태 자체가 죄다."</p>
+                        <p>"이혼한 사람은 실패자다."</p>
+                        <span class="hint">👆 클릭해서 뒤집기</span>
+                    </div>
+                    <div class="back">
+                        <h3>원어의 의미: 내쫓다</h3>
+                        <p>하나님이 미워하시는 것은 법적인 절차가 아닙니다.</p>
+                        <p><strong>"힘 있는 자가 자신의 욕망을 위해 약한 자를 내쫓고 보호하지 않는 폭력"</strong></p>
+                        <p>바로 이 태도를 미워하시는 것입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💔 깨어진 약속: 이스라엘과 우리</h2>
+            <p>구약에서 하나님과 이스라엘의 관계는 <strong>'결혼'</strong>이었습니다. 하지만 이스라엘은 필요할 때만 하나님을 찾고, 불리해지면 다른 우상에게로 향했습니다.</p>
+            <p>우리는 어떤가요?</p>
             
-                            <!-- Arrow / Text -->
-                            <div class="text-autumn-red fade-in-up delay-200 flex items-center">
-                                <i data-lucide="arrow-right" class="w-8 h-8 mr-2"></i>
-                                <span class="block text-sm font-bold bg-white px-2 py-1 rounded shadow">
-                                    조금만 더 걸으면
-                                    <span class="en-sub">If you walk just a little further</span>
-                                </span>
-                            </div>
-
-                            <!-- Right: 성공회 성당 / Anglican Cathedral -->
-                            <div class="bg-white p-6 rounded shadow-xl w-64 text-center border-b-4 border-autumn-red scale-110 fade-in-up delay-300 slide4-card">
-                                <i data-lucide="church" class="w-10 h-10 mx-auto text-autumn-red mb-2"></i>
-                                <h4 class="font-bold text-gray-900">
-                                    성공회 서울대교구 성당
-                                    <span class="en-sub">Anglican Cathedral in Seoul</span>
-                                </h4>
-                                <p class="text-xs text-gray-500 mt-2">
-                                    이 길을 끝까지 걸어가면, 이 길은 <strong>하나님을 만나러 가는 길</strong>이 됩니다.
-                                    <span class="en-sub">
-                                        If you walk all the way to the end, this road becomes
-                                        a road <strong>toward meeting God</strong>.
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 인용 / Quote -->
-                    <p class="mt-16 text-xl text-gray-800 font-serif italic fade-in-up delay-500">
-                        "같은 덕수궁 돌담길이지만, 어디를 바라보며 걷느냐에 따라<br>
-                        이혼하러 가는 길이 될 수도 있고, 하나님을 만나러 가는 길이 될 수도 있습니다."
-                        <span class="en-sub-lg">
-                            "It is the same Deoksugung stone wall road, but depending on what you fix your eyes on,<br>
-                            it can be a road toward divorce or a road toward meeting God."
-                        </span>
-                    </p>
+            <div class="comparison">
+                <div class="comp-box">
+                    <h3>나에게 유리할 때</h3>
+                    <p>이웃을 이용하고<br>하나님을 찾음</p>
                 </div>
-            </section>
-
-
-            <!-- Slide 5: Conclusion / Jesus -->
-            <section class="slide bg-autumn-red text-white relative" id="slide5">
-                <div class="absolute inset-0 bg-black/20"></div>
-                <div class="max-w-4xl mx-auto w-full text-center relative z-10">
-                    <div class="mb-8 fade-in-up">
-                        <i data-lucide="cross" class="w-20 h-20 mx-auto text-white/80 mb-6"></i>
-                    </div>
-                    
-                    <h2 class="text-3xl md:text-5xl font-bold serif mb-8 leading-normal fade-in-up delay-100">
-                        폭력이 가득한 세상 속에<br>
-                        자신을 내어 던지신 사랑
-                        <span class="en-sub-lg font-normal">
-                            Love that Gave Itself in a World Full of Violence
-                        </span>
-                    </h2>
-
-                    <div class="bg-white/10 backdrop-blur-sm p-8 rounded-lg border border-white/20 text-left md:text-center fade-in-up delay-200">
-                        <p class="text-lg md:text-xl leading-relaxed font-light">
-                            예수님은 우리를 위해 모든 폭력을 홀로 참아내셨습니다.
-                            <br><br>
-                            나에게 유리한 것만 바라보면 삶은 폭력으로 남겠지만,
-                            <br>
-                            <span class="font-bold text-yellow-300">그 길 끝에 서 계신 예수님을 바라보며 걷는다면</span>
-                            <br>
-                            그 길은 승리의 길이 됩니다.
-                            <span class="en-sub-lg">
-                                Jesus endured all violence alone for our sake.
-                                <br><br>
-                                If we only seek what is advantageous to ourselves,
-                                our lives will remain shaped by violence.
-                                <br>
-                                But if we walk while fixing our eyes on Jesus,
-                                who stands at the end of the road,
-                                that road becomes a path of victory.
-                            </span>
-                        </p>
-                    </div>
-
-                    <div class="mt-12 fade-in-up delay-300">
-                        <button onclick="document.querySelector('.scroll-snap-wrapper').scrollTo({top: 0, behavior: 'smooth'})" 
-                                class="bg-white text-autumn-red hover:bg-gray-100 px-8 py-3 rounded-full font-bold transition-all flex items-center mx-auto shadow-lg group">
-                            <i data-lucide="refresh-ccw" class="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-500"></i>
-                            처음으로 돌아가기
-                            <span class="en-sub ml-2">Return to the beginning</span>
-                        </button>
-                    </div>
+                <div class="comp-box" style="background-color: #ffebee;">
+                    <h3>나에게 불리할 때</h3>
+                    <p>이웃을 외면하고<br>하나님을 '내쫓음'</p>
                 </div>
-                
-                <div class="absolute bottom-4 left-0 w-full text-center text-white/40 text-xs">
-                    Sunday Message Infographic
-                    <span class="en-sub">Bilingual Korean–English Version</span>
-                </div>
-            </section>
+            </div>
+            <br>
+            <p>하나님을 사랑하고 이웃을 사랑하는 것, 이것이 우리가 지켜야 할 결혼 서약입니다.</p>
+        </div>
 
+        <div class="section" id="pathway">
+            <h2>🍂 길의 끝에서 만나는 것</h2>
+            <p>다시 덕수궁 돌담길로 돌아가 봅니다. 가을 단풍이 아름다운 이 길.</p>
+            <p>누군가는 <strong>가정 법원</strong>을 보며 '이혼하러 가는 길'이라 생각합니다. 하지만 그 법원을 지나 끝까지 걸어가면 무엇이 있을까요?</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Seoul_Anglican_Cathedral_20130926_001.jpg/640px-Seoul_Anglican_Cathedral_20130926_001.jpg" alt="성공회 서울주교좌성당" style="width: 100%; border-radius: 10px; max-width: 400px;">
+                <p style="font-size: 0.9rem; color: #666;">(성공회 서울주교좌성당)</p>
+            </div>
+            
+            <p>그 길 끝에는 아름다운 <strong>교회(성당)</strong>가 있습니다. 같은 길이지만 끝을 보면 <strong>'하나님을 만나러 가는 길'</strong>이 됩니다.</p>
+        </div>
+
+        <div class="section final-section">
+            <h2>✝️ 폭력을 넘어선 사랑</h2>
+            <p>나에게 유리한 것만 바라보면 삶에는 폭력만 남습니다.</p>
+            <p>하지만 길 끝에 계신 예수님을 바라보십시오.</p>
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.3); margin: 20px 0;">
+            <p><strong>"예수님은 왜 그 숱한 아픔을 홀로 인내하셨나?"</strong></p>
+            <p style="margin-top: 15px; font-size: 1.1rem;">
+                폭력이 가득한 세상 속에<br>
+                하나님의 사랑을 전하고자<br>
+                자신을 내어 던지신 희생.
+            </p>
+            <p style="margin-top: 20px;">이것이 구약이 우리에게 주는 메시지이며,<br>우리가 걸어가야 할 길입니다.</p>
         </div>
     </div>
 
     <script>
-        lucide.createIcons();
-
+        // 스크롤 애니메이션: 요소가 화면에 나타날 때 페이드인 효과
         const observerOptions = {
-            root: document.querySelector('.scroll-snap-wrapper'),
-            threshold: 0.3
+            threshold: 0.15
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+                    entry.target.classList.add('visible');
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.slide').forEach(slide => {
-            observer.observe(slide);
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
         });
     </script>
 </body>
