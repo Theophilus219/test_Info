@@ -3,256 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>덕수궁 돌담길: 그 길 끝에 있는 것</title>
+    <title>그 길 끝에 서 계신 분 - 덕수궁 돌담길 설교</title>
     <style>
         :root {
-            --stone-gray: #5D5C61;
-            --autumn-orange: #D98324;
-            --autumn-yellow: #E6B325;
-            --deep-red: #A43820;
-            --cream: #F5F5F5;
-            --text-dark: #333;
+            --bg-color: #fdfbf7;
+            --text-color: #333;
+            --accent-color: #d35400; /* 단풍색 */
+            --stone-color: #7f8c8d;
+            --gold-color: #f1c40f;
+            --path-color: #e0e0e0;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-            background-color: var(--cream);
-            color: var(--text-dark);
-            line-height: 1.6;
+            font-family: 'KoPub Batang', 'Nanum Myeongjo', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
             overflow-x: hidden;
         }
 
-        /* Header Section */
-        header {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1509664158680-293644c970dd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        header h1 { font-size: 3rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        header p { font-size: 1.2rem; max-width: 600px; margin-bottom: 40px; }
-        .scroll-down {
-            animation: bounce 2s infinite;
-            font-size: 2rem;
-            cursor: pointer;
+        /* 타이포그래피 */
+        h1, h2, h3 {
+            font-weight: 700;
+            word-break: keep-all;
         }
 
-        /* Main Container */
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 50px 20px;
+            padding: 20px;
             position: relative;
         }
 
-        /* Road Line */
-        .road-line {
+        /* 타임라인 (길) 효과 */
+        .path-line {
             position: absolute;
             left: 50%;
             top: 0;
             bottom: 0;
             width: 4px;
-            background: var(--stone-gray);
+            background: repeating-linear-gradient(
+                to bottom,
+                var(--stone-color),
+                var(--stone-color) 10px,
+                transparent 10px,
+                transparent 20px
+            );
             transform: translateX(-50%);
-            z-index: 0;
+            z-index: -1;
+            opacity: 0.3;
         }
 
-        /* Section Styling */
-        .section {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 50px 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease-out;
-            border-left: 5px solid var(--autumn-orange);
-        }
-        .section.visible { opacity: 1; transform: translateY(0); }
-
-        h2 { color: var(--deep-red); margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        
-        /* Interactive Card Flip */
-        .flip-container { perspective: 1000px; margin: 20px 0; cursor: pointer; height: 200px; }
-        .flipper {
-            transition: 0.6s;
-            transform-style: preserve-3d;
-            position: relative;
-            height: 100%;
-        }
-        .flip-container.hover .flipper { transform: rotateY(180deg); }
-        .front, .back {
-            width: 100%; height: 100%;
-            position: absolute;
-            backface-visibility: hidden;
+        /* 섹션 공통 스타일 */
+        section {
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border-radius: 10px;
-            padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
         }
-        .front { background-color: var(--stone-gray); color: white; }
-        .back { background-color: var(--autumn-orange); color: white; transform: rotateY(180deg); }
-        .hint { font-size: 0.8rem; margin-top: 10px; opacity: 0.8; }
 
-        /* Highlight Box */
-        .highlight-box {
-            background-color: #FFF3E0;
-            border-left: 4px solid var(--autumn-yellow);
-            padding: 15px;
-            margin: 15px 0;
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+            width: 90%;
+            position: relative;
+        }
+
+        /* 1. 서론: 돌담길 */
+        .intro-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* 2. 본론: 오해와 진실 (플립 카드) */
+        .flip-container {
+            perspective: 1000px;
+            width: 100%;
+            height: 300px;
+            cursor: pointer;
+        }
+        
+        .flipper {
+            transition: 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .flip-container.hover .flipper {
+            transform: rotateY(180deg);
+        }
+
+        .front, .back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .front {
+            background-color: #fff;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .back {
+            background-color: var(--accent-color);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .instruction {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 10px;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* 3. 적용: 약속 */
+        .promise-box {
+            border-left: 5px solid var(--accent-color);
+            text-align: left;
+            padding-left: 20px;
+            margin-top: 20px;
             font-style: italic;
         }
 
-        /* Comparison Table */
-        .comparison {
+        /* 4. 결론: 인터렉티브 엔딩 */
+        .choice-btn-container {
             display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
             gap: 10px;
-        }
-        .comp-box {
-            flex: 1;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .comp-box h3 { font-size: 1rem; color: var(--text-dark); margin-bottom: 10px; }
-
-        /* Final Message */
-        .final-section {
-            text-align: center;
-            background: var(--deep-red);
-            color: white;
-            border-left: none;
-        }
-        .final-section h2 { color: white; border-color: rgba(255,255,255,0.3); }
-
-        /* Animations */
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-10px);}
-            60% {transform: translateY(-5px);}
+            justify-content: center;
+            margin: 20px 0;
         }
 
-        @media (max-width: 600px) {
-            header h1 { font-size: 2rem; }
-            .section { margin: 30px 0; padding: 20px; }
-            .comparison { flex-direction: column; }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: 0.3s;
         }
+
+        .btn-court { background-color: #95a5a6; color: white; }
+        .btn-church { background-color: var(--gold-color); color: white; }
+        
+        .btn:hover { transform: scale(1.05); }
+
+        .ending-scene {
+            transition: all 0.5s ease;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .ending-court {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+
+        .ending-church {
+            background-color: #fff8e1;
+            border: 2px solid var(--gold-color);
+            color: #333;
+        }
+        
+        .highlight {
+            background: linear-gradient(to top, #ffeebb 50%, transparent 50%);
+        }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>덕수궁 돌담길</h1>
-        <p>그 길을 함께 걷다 보면 만나는 두 가지 끝</p>
-        <div class="scroll-down" onclick="document.querySelector('.container').scrollIntoView({behavior: 'smooth'})">
-            ⬇
-        </div>
-    </header>
-
     <div class="container">
-        <div class="road-line"></div>
+        <div class="path-line"></div>
 
-        <div class="section">
-            <h2>🧱 돌담길의 전설</h2>
-            <p>한국에는 <strong>'덕수궁 돌담길'</strong>이라는 아름다운 길이 있습니다. 하지만 연인들 사이에는 무서운 소문이 하나 있습니다.</p>
-            <div class="highlight-box">
-                "이 길을 걸은 연인은 결국 헤어지게 된다."
+        <section id="intro" class="visible">
+            <div class="intro-icon">🍂 🧱</div>
+            <h1>덕수궁 돌담길</h1>
+            <div class="card">
+                <p>한국에는 <strong>'덕수궁 돌담길'</strong>이라는 아름다운 길이 있습니다.<br>하지만 연인들이 이 길을 걸으면 헤어진다는 슬픈 전설이 있죠.</p>
+                <hr>
+                <p>왜냐하면 예전에 이 길의 중간에<br><strong>이혼을 허락하는 가정 법원</strong>이 있었기 때문입니다.</p>
             </div>
-            <p>왜 이런 말이 생겼을까요? 바로 이 길 중간에 이혼을 허락하는 <strong>가정 법원</strong>이 있었기 때문입니다.</p>
-        </div>
+            <p>⬇️ 아래로 걸어가 봅시다 ⬇️</p>
+        </section>
 
-        <div class="section">
-            <h2>📖 오해와 진실: '이혼'</h2>
-            <p>성경은 "하나님이 이혼을 미워하신다"고 말합니다. 우리는 이 말을 어떻게 이해해왔을까요?</p>
-            <p><strong>아래 카드를 클릭(터치)하여 진정한 의미를 확인해보세요.</strong></p>
+        <section id="misunderstanding">
+            <h2>"하나님은 이혼을 미워하신다?"</h2>
+            <p>이 말씀은 오랫동안 사람들에게 상처를 주기도 했습니다.</p>
             
             <div class="flip-container" onclick="this.classList.toggle('hover')">
                 <div class="flipper">
                     <div class="front">
-                        <h3>우리의 오해</h3>
-                        <p>"이혼이라는 법적 상태 자체가 죄다."</p>
-                        <p>"이혼한 사람은 실패자다."</p>
-                        <span class="hint">👆 클릭해서 뒤집기</span>
+                        <h3>❌ 오해 (Misunderstanding)</h3>
+                        <p>이혼한 사실 자체가 죄다?</p>
+                        <p>이혼한 사람을 차별하고 정죄하는 근거?</p>
+                        <div class="instruction">👆 카드를 탭하여 진짜 의미를 확인하세요</div>
                     </div>
                     <div class="back">
-                        <h3>원어의 의미: 내쫓다</h3>
-                        <p>하나님이 미워하시는 것은 법적인 절차가 아닙니다.</p>
-                        <p><strong>"힘 있는 자가 자신의 욕망을 위해 약한 자를 내쫓고 보호하지 않는 폭력"</strong></p>
-                        <p>바로 이 태도를 미워하시는 것입니다.</p>
+                        <h3>⭕ 진실 (Truth)</h3>
+                        <p>원어의 의미: <strong>"내쫓다 (Sending Away)"</strong></p>
+                        <p>하나님이 미워하시는 것은 '제도'가 아니라<br>강자가 약자를 이용하고 버리는<br><strong>'폭력'</strong>입니다.</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="section">
-            <h2>💔 깨어진 약속: 이스라엘과 우리</h2>
-            <p>구약에서 하나님과 이스라엘의 관계는 <strong>'결혼'</strong>이었습니다. 하지만 이스라엘은 필요할 때만 하나님을 찾고, 불리해지면 다른 우상에게로 향했습니다.</p>
-            <p>우리는 어떤가요?</p>
-            
-            <div class="comparison">
-                <div class="comp-box">
-                    <h3>나에게 유리할 때</h3>
-                    <p>이웃을 이용하고<br>하나님을 찾음</p>
-                </div>
-                <div class="comp-box" style="background-color: #ffebee;">
-                    <h3>나에게 불리할 때</h3>
-                    <p>이웃을 외면하고<br>하나님을 '내쫓음'</p>
-                </div>
+        <section id="application">
+            <div class="intro-icon">🤝 💔</div>
+            <h2>깨어진 약속, 내쫓는 마음</h2>
+            <div class="card">
+                <p>이스라엘에게 하나님과의 관계는 <strong>'결혼'</strong>과 같았습니다.<br>하지만 그들은 필요할 때만 하나님을 찾고, 불리해지면 우상을 찾으며 하나님을 <strong>내쫓았습니다.</strong></p>
             </div>
-            <br>
-            <p>하나님을 사랑하고 이웃을 사랑하는 것, 이것이 우리가 지켜야 할 결혼 서약입니다.</p>
-        </div>
-
-        <div class="section" id="pathway">
-            <h2>🍂 길의 끝에서 만나는 것</h2>
-            <p>다시 덕수궁 돌담길로 돌아가 봅니다. 가을 단풍이 아름다운 이 길.</p>
-            <p>누군가는 <strong>가정 법원</strong>을 보며 '이혼하러 가는 길'이라 생각합니다. 하지만 그 법원을 지나 끝까지 걸어가면 무엇이 있을까요?</p>
-            
-            <div style="text-align: center; margin: 20px 0;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Seoul_Anglican_Cathedral_20130926_001.jpg/640px-Seoul_Anglican_Cathedral_20130926_001.jpg" alt="성공회 서울주교좌성당" style="width: 100%; border-radius: 10px; max-width: 400px;">
-                <p style="font-size: 0.9rem; color: #666;">(성공회 서울주교좌성당)</p>
+            <div class="promise-box">
+                <p>"우리는 어떤가요? 나에게 유리할 때만 이웃을 찾고, 하나님을 찾고 있지는 않나요? 그것은 관계가 아니라 <strong>이용</strong>입니다."</p>
             </div>
-            
-            <p>그 길 끝에는 아름다운 <strong>교회(성당)</strong>가 있습니다. 같은 길이지만 끝을 보면 <strong>'하나님을 만나러 가는 길'</strong>이 됩니다.</p>
-        </div>
+        </section>
 
-        <div class="section final-section">
-            <h2>✝️ 폭력을 넘어선 사랑</h2>
-            <p>나에게 유리한 것만 바라보면 삶에는 폭력만 남습니다.</p>
-            <p>하지만 길 끝에 계신 예수님을 바라보십시오.</p>
-            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.3); margin: 20px 0;">
-            <p><strong>"예수님은 왜 그 숱한 아픔을 홀로 인내하셨나?"</strong></p>
-            <p style="margin-top: 15px; font-size: 1.1rem;">
-                폭력이 가득한 세상 속에<br>
-                하나님의 사랑을 전하고자<br>
-                자신을 내어 던지신 희생.
-            </p>
-            <p style="margin-top: 20px;">이것이 구약이 우리에게 주는 메시지이며,<br>우리가 걸어가야 할 길입니다.</p>
-        </div>
+        <section id="conclusion">
+            <h2>길의 끝에서 무엇을 보는가?</h2>
+            <p>덕수궁 돌담길, 다시 그 길을 걷습니다.<br>가을 단풍이 예쁜 이 길 끝에는 두 가지 건물이 있습니다.</p>
+            
+            <p>당신은 무엇을 바라보며 걸으시겠습니까?</p>
+            
+            <div class="choice-btn-container">
+                <button class="btn btn-court" onclick="showEnding('court')">⚖️ 가정 법원</button>
+                <button class="btn btn-church" onclick="showEnding('church')">⛪️ 십자가 (성당)</button>
+            </div>
+
+            <div id="ending-content" class="ending-scene" style="display:none;">
+                </div>
+        </section>
     </div>
 
     <script>
-        // 스크롤 애니메이션: 요소가 화면에 나타날 때 페이드인 효과
+        // 1. 스크롤 애니메이션 (Intersection Observer)
         const observerOptions = {
-            threshold: 0.15
+            threshold: 0.2
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -263,9 +290,36 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.section').forEach(section => {
+        document.querySelectorAll('section').forEach(section => {
             observer.observe(section);
         });
+
+        // 2. 엔딩 인터렉션 로직
+        function showEnding(type) {
+            const contentBox = document.getElementById('ending-content');
+            contentBox.style.display = 'block';
+            contentBox.style.opacity = 0;
+            
+            setTimeout(() => {
+                if (type === 'court') {
+                    contentBox.className = 'ending-scene ending-court';
+                    contentBox.innerHTML = `
+                        <h3>⚖️ 법원만 바라본다면...</h3>
+                        <p>이 길은 단지 <strong>'이혼하러 가는 길'</strong>이 됩니다.</p>
+                        <p>나에게 유리한 것만 찾다 보면,<br>우리 삶에는 결국 차가운 계산과 폭력만 남게 될 것입니다.</p>
+                    `;
+                } else {
+                    contentBox.className = 'ending-scene ending-church';
+                    contentBox.innerHTML = `
+                        <h3>⛪️ 하나님을 바라본다면...</h3>
+                        <p>이 길은 <strong>'하나님을 만나러 가는 길'</strong>이 됩니다.</p>
+                        <p>길 끝에 계신 예수님은 <span class="highlight">우리를 위해 모든 폭력을 참아내셨습니다.</span></p>
+                        <p>같은 고통 속에서도 그분을 바라볼 때,<br>우리의 길은 전혀 다른, <strong>사랑의 길</strong>이 됩니다.</p>
+                    `;
+                }
+                contentBox.style.opacity = 1;
+            }, 100);
+        }
     </script>
 </body>
 </html>
